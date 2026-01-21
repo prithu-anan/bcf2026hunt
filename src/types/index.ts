@@ -17,7 +17,7 @@ export interface TeamProgress {
 export interface Level {
   levelId: number;
   title: string;
-  image: string;
+  image?: string;
   description?: string;
   attachment?: string; // pdf or file link
   correctAnswer: string;
@@ -36,7 +36,7 @@ export interface Submission {
 // Auth types
 export interface User {
   id: string;
-  email: string;
+  username: string;
   name: string;
   role: "team" | "admin";
   teamId?: string;

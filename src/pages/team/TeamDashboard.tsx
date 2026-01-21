@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Puzzle, Trophy, Users, Target } from "lucide-react";
+import { Target, Trophy, Layers } from "lucide-react";
 import { StatsWidget } from "@/components/StatsWidget";
 import { ProgressChart } from "@/components/ProgressChart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,25 +42,26 @@ export default function TeamDashboard() {
         <p className="text-muted-foreground">Team: {team?.name || "Loading..."}</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <StatsWidget title="Current Level" value={completedLevels + 1} subtitle={currentLevel?.title} icon={Target} />
         <StatsWidget title="Completed" value={`${completedLevels}/${totalLevels}`} icon={Trophy} />
-        <StatsWidget title="Team Members" value={team?.members.length || 0} icon={Users} />
-        <StatsWidget title="Puzzles Left" value={totalLevels - completedLevels} icon={Puzzle} />
+        <StatsWidget title="Challenges Left" value={totalLevels - completedLevels} icon={Layers} />
       </div>
 
       {currentLevel && (
         <Card>
           <CardHeader>
-            <CardTitle>Current Puzzle</CardTitle>
+            <CardTitle>Current Challenge</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col sm:flex-row gap-4">
-              <img src={currentLevel.image} alt={currentLevel.title} className="w-full sm:w-48 h-32 object-cover rounded-lg" />
+              {currentLevel.image && (
+                <img src={currentLevel.image} alt={currentLevel.title} className="w-full sm:w-48 h-32 object-cover rounded-lg" />
+              )}
               <div className="flex-1 space-y-2">
                 <h3 className="font-semibold">{currentLevel.title}</h3>
                 <p className="text-sm text-muted-foreground">{currentLevel.description}</p>
-                <Button asChild><Link to="/team/puzzle">Solve Puzzle →</Link></Button>
+                <Button asChild><Link to="/team/challenge">Solve Challenge →</Link></Button>
               </div>
             </div>
           </CardContent>

@@ -8,7 +8,7 @@ const STORAGE_KEY = "treasure_hunt_auth";
 
 export const authService = {
   async login(
-    email: string,
+    username: string,
     password: string,
     role: "team" | "admin"
   ): Promise<User> {
@@ -17,30 +17,10 @@ export const authService = {
     // Mock: accept any credentials
     const user: User = {
       id: `user-${Date.now()}`,
-      email,
-      name: email.split("@")[0],
+      username,
+      name: username,
       role,
       teamId: role === "team" ? mockTeams[0].id : undefined,
-    };
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-    return user;
-  },
-
-  async signup(
-    email: string,
-    password: string,
-    name: string,
-    teamName?: string
-  ): Promise<User> {
-    await randomDelay();
-
-    const user: User = {
-      id: `user-${Date.now()}`,
-      email,
-      name,
-      role: "team",
-      teamId: mockTeams[0].id,
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));

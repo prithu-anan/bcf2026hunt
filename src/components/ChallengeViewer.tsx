@@ -3,12 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ZoomIn, ZoomOut, RotateCw } from "lucide-react";
 
-interface PuzzleViewerProps {
+interface ChallengeViewerProps {
   image: string;
   title: string;
 }
 
-export function PuzzleViewer({ image, title }: PuzzleViewerProps) {
+export function ChallengeViewer({ image, title }: ChallengeViewerProps) {
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
 
@@ -32,21 +32,17 @@ export function PuzzleViewer({ image, title }: PuzzleViewerProps) {
           </Button>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="relative overflow-hidden rounded-lg bg-muted aspect-video">
-          <div
-            className="absolute inset-0 flex items-center justify-center overflow-auto"
-            style={{ cursor: zoom > 1 ? "grab" : "default" }}
-          >
-            <img
-              src={image}
-              alt={title}
-              className="max-w-none transition-transform duration-200"
-              style={{
-                transform: `scale(${zoom}) rotate(${rotation}deg)`,
-              }}
-            />
-          </div>
+      <CardContent className="p-4">
+        <div className="flex justify-center">
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-auto rounded-lg transition-transform duration-200"
+            style={{
+              transform: `scale(${zoom}) rotate(${rotation}deg)`,
+              transformOrigin: "center center",
+            }}
+          />
         </div>
       </CardContent>
     </Card>

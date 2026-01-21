@@ -57,8 +57,7 @@ export function AdminLayout() {
       >
         <div className="flex h-full flex-col">
           {/* Sidebar header */}
-          <div className="flex h-14 items-center justify-between border-b px-4">
-            {!sidebarCollapsed && <Logo size="sm" />}
+          <div className="flex h-14 items-center justify-end border-b px-4">
             <div className="flex items-center gap-1">
               <Button
                 variant="ghost"

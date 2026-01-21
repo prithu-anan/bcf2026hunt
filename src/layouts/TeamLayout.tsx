@@ -4,7 +4,7 @@ import {
   LayoutDashboard,
   User,
   Users,
-  Puzzle,
+  Target,
   Trophy,
   Menu,
   X,
@@ -20,7 +20,7 @@ const navItems = [
   { href: "/team/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/team/profile", label: "Profile", icon: User },
   { href: "/team/teams", label: "Teams", icon: Users },
-  { href: "/team/puzzle", label: "Puzzle", icon: Puzzle },
+  { href: "/team/challenge", label: "Challenge", icon: Target },
   { href: "/team/leaderboard", label: "Leaderboard", icon: Trophy },
 ];
 
@@ -71,8 +71,7 @@ export function TeamLayout() {
         >
           <div className="flex h-full flex-col">
             {/* Sidebar header */}
-            <div className="flex h-14 items-center justify-between border-b px-4">
-              <Logo size="sm" />
+            <div className="flex h-14 items-center justify-end border-b px-4">
               <Button
                 variant="ghost"
                 size="icon"
