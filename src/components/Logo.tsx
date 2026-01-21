@@ -1,5 +1,6 @@
 import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface LogoProps {
   size?: "sm" | "md" | "lg";
@@ -7,6 +8,8 @@ interface LogoProps {
 }
 
 export function Logo({ size = "md", showText = true }: LogoProps) {
+  const { user } = useAuth();
+  
   const sizeClasses = {
     sm: "h-6 w-6",
     md: "h-8 w-8",
@@ -19,8 +22,13 @@ export function Logo({ size = "md", showText = true }: LogoProps) {
     lg: "text-2xl",
   };
 
+  // Determine where logo should link based on auth state
+  const logoHref = user 
+    ? (user.role === "admin" ? "/admin/dashboard" : "/team/dashboard")
+    : "/team/login";
+
   return (
-    <Link to="/" className="flex items-center gap-2 font-bold">
+    <Link to={logoHref} className="flex items-center gap-2 font-bold">
       <div className="gradient-primary rounded-lg p-1.5 glow-primary">
         <MapPin className={`${sizeClasses[size]} text-primary-foreground`} />
       </div>
