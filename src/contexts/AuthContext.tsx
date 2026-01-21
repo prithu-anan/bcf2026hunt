@@ -3,8 +3,7 @@ import { User, AuthState } from "@/types";
 import { authService } from "@/services/authService";
 
 interface AuthContextType extends AuthState {
-  login: (email: string, password: string, role: "team" | "admin") => Promise<void>;
-  signup: (email: string, password: string, name: string, teamName?: string) => Promise<void>;
+  login: (username: string, password: string, role: "team" | "admin") => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -27,21 +26,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  const login = async (email: string, password: string, role: "team" | "admin") => {
+  const login = async (username: string, password: string, role: "team" | "admin") => {
     setState((prev) => ({ ...prev, isLoading: true }));
     try {
-      const user = await authService.login(email, password, role);
-      setState({ user, isAuthenticated: true, isLoading: false });
-    } catch (error) {
-      setState((prev) => ({ ...prev, isLoading: false }));
-      throw error;
-    }
-  };
-
-  const signup = async (email: string, password: string, name: string, teamName?: string) => {
-    setState((prev) => ({ ...prev, isLoading: true }));
-    try {
-      const user = await authService.signup(email, password, name, teamName);
+      const user = await authService.login(username, password, role);
       setState({ user, isAuthenticated: true, isLoading: false });
     } catch (error) {
       setState((prev) => ({ ...prev, isLoading: false }));
@@ -55,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, signup, logout }}>
+    <AuthContext.Provider value={{ ...state, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

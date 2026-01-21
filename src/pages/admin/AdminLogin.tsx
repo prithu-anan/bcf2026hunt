@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Loader2, Shield } from "lucide-react";
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
@@ -18,7 +18,7 @@ export default function AdminLogin() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await login(email, password, "admin");
+      await login(username, password, "admin");
       navigate("/admin/dashboard");
     } finally {
       setIsLoading(false);
@@ -34,8 +34,8 @@ export default function AdminLogin() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
-          <div className="space-y-2"><Label htmlFor="password">Password</Label><Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
+          <div className="space-y-2"><Label htmlFor="username">Username</Label><Input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="admin_username" required /></div>
+          <div className="space-y-2"><Label htmlFor="password">Password</Label><Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required /></div>
           <Button type="submit" className="w-full" disabled={isLoading}>{isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Sign In</Button>
           <p className="text-center text-sm text-muted-foreground"><Link to="/team/login" className="text-primary hover:underline">← Team Login</Link></p>
         </form>

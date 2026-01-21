@@ -13,12 +13,11 @@ import { AdminLayout } from "@/layouts/AdminLayout";
 
 // Team pages
 import TeamLogin from "@/pages/team/TeamLogin";
-import TeamSignup from "@/pages/team/TeamSignup";
 import TeamDashboard from "@/pages/team/TeamDashboard";
 import TeamProfile from "@/pages/team/TeamProfile";
 import TeamsList from "@/pages/team/TeamsList";
 import TeamDetail from "@/pages/team/TeamDetail";
-import TeamPuzzle from "@/pages/team/TeamPuzzle";
+import TeamChallenge from "@/pages/team/TeamChallenge";
 import TeamLeaderboard from "@/pages/team/TeamLeaderboard";
 
 // Admin pages
@@ -47,10 +46,9 @@ const App = () => (
               {/* Redirect root to team login */}
               <Route path="/" element={<Navigate to="/team/login" replace />} />
 
-              {/* Team auth routes */}
+              {/* Auth routes */}
               <Route element={<AuthLayout />}>
                 <Route path="/team/login" element={<TeamLogin />} />
-                <Route path="/team/signup" element={<TeamSignup />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
               </Route>
 
@@ -60,7 +58,7 @@ const App = () => (
                 <Route path="profile" element={<TeamProfile />} />
                 <Route path="teams" element={<TeamsList />} />
                 <Route path="teams/:teamId" element={<TeamDetail />} />
-                <Route path="puzzle" element={<TeamPuzzle />} />
+                <Route path="challenge" element={<TeamChallenge />} />
                 <Route path="leaderboard" element={<TeamLeaderboard />} />
               </Route>
 

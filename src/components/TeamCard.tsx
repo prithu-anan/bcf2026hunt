@@ -1,6 +1,6 @@
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Users, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 import { Team } from "@/types";
 import { Link } from "react-router-dom";
 
@@ -26,32 +26,12 @@ export function TeamCard({ team, basePath = "/team" }: TeamCardProps) {
             </Badge>
           </div>
         </CardHeader>
-        <CardContent className="pb-2">
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <Users className="h-4 w-4" />
-              <span>{team.members.length} members</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Trophy className="h-4 w-4" />
-              <span>{team.progress.length} completed</span>
-            </div>
+        <CardContent>
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+            <Trophy className="h-4 w-4" />
+            <span>{team.progress.length} completed</span>
           </div>
         </CardContent>
-        <CardFooter className="pt-0">
-          <div className="flex flex-wrap gap-1">
-            {team.members.slice(0, 3).map((member, i) => (
-              <Badge key={i} variant="outline" className="text-xs">
-                {member.split(" ")[0]}
-              </Badge>
-            ))}
-            {team.members.length > 3 && (
-              <Badge variant="outline" className="text-xs">
-                +{team.members.length - 3}
-              </Badge>
-            )}
-          </div>
-        </CardFooter>
       </Card>
     </Link>
   );

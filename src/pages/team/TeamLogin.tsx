@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Loader2 } from "lucide-react";
 
 export default function TeamLogin() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
@@ -18,7 +18,7 @@ export default function TeamLogin() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await login(email, password, "team");
+      await login(username, password, "team");
       navigate("/team/dashboard");
     } finally {
       setIsLoading(false);
@@ -34,8 +34,8 @@ export default function TeamLogin() {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="team@example.com" required />
+            <Label htmlFor="username">Username</Label>
+            <Input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="your_username" required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
@@ -45,9 +45,6 @@ export default function TeamLogin() {
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign In
           </Button>
-          <p className="text-center text-sm text-muted-foreground">
-            Don't have an account? <Link to="/team/signup" className="text-primary hover:underline">Sign up</Link>
-          </p>
           <p className="text-center text-sm text-muted-foreground">
             <Link to="/admin/login" className="text-primary hover:underline">Admin Login →</Link>
           </p>

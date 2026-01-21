@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,14 +7,23 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { authService } from "@/services/authService";
+import { teamService } from "@/services/teamService";
 import { CheckCircle } from "lucide-react";
+import { Team } from "@/types";
 
 export default function TeamProfile() {
   const { user } = useAuth();
   const { theme } = useTheme();
+  const [team, setTeam] = useState<Team | null>(null);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (user?.teamId) {
+      teamService.getTeamById(user.teamId).then(setTeam);
+    }
+  }, [user]);
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +42,7 @@ export default function TeamProfile() {
         <CardHeader><CardTitle>Account Info</CardTitle></CardHeader>
         <CardContent className="space-y-2">
           <p><span className="text-muted-foreground">Name:</span> {user?.name}</p>
-          <p><span className="text-muted-foreground">Email:</span> {user?.email}</p>
+          <p><span className="text-muted-foreground">Team:</span> {team?.name || "Loading..."}</p>
         </CardContent>
       </Card>
 

@@ -14,7 +14,7 @@ export default function AdminLevels() {
   const [levels, setLevels] = useState<Level[]>([]);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ title: "", image: "", description: "", correctAnswer: "" });
+  const [form, setForm] = useState({ title: "", image: "", description: "", attachment: "", correctAnswer: "" });
 
   useEffect(() => {
     levelService.getAllLevels().then(setLevels);
@@ -22,25 +22,32 @@ export default function AdminLevels() {
   }, []);
 
   const handleCreate = async () => {
-    await levelService.createLevel(form);
+    await levelService.createLevel({
+      title: form.title,
+      image: form.image || undefined,
+      description: form.description || undefined,
+      attachment: form.attachment || undefined,
+      correctAnswer: form.correctAnswer,
+    });
     const updated = await levelService.getAllLevels();
     setLevels(updated);
     setOpen(false);
-    setForm({ title: "", image: "", description: "", correctAnswer: "" });
+    setForm({ title: "", image: "", description: "", attachment: "", correctAnswer: "" });
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div><h1 className="text-2xl font-bold">Level Management</h1><p className="text-muted-foreground">Create and manage puzzles</p></div>
+        <div><h1 className="text-2xl font-bold">Level Management</h1><p className="text-muted-foreground">Create and manage challenges</p></div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild><Button><Plus className="mr-2 h-4 w-4" />Add Level</Button></DialogTrigger>
           <DialogContent>
             <DialogHeader><DialogTitle>Create New Level</DialogTitle></DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2"><Label>Title</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
-              <div className="space-y-2"><Label>Image URL</Label><Input value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} /></div>
-              <div className="space-y-2"><Label>Description</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+              <div className="space-y-2"><Label>Image URL (optional)</Label><Input value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://..." /></div>
+              <div className="space-y-2"><Label>Description (optional)</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+              <div className="space-y-2"><Label>Attachment URL (optional)</Label><Input value={form.attachment} onChange={(e) => setForm({ ...form, attachment: e.target.value })} placeholder="PDF or file URL" /></div>
               <div className="space-y-2"><Label>Correct Answer</Label><Input value={form.correctAnswer} onChange={(e) => setForm({ ...form, correctAnswer: e.target.value })} /></div>
               <Button onClick={handleCreate} className="w-full">Create Level</Button>
             </div>
