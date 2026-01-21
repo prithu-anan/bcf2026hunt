@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Target, Trophy, Layers } from "lucide-react";
+import { Target, Trophy } from "lucide-react";
 import { StatsWidget } from "@/components/StatsWidget";
 import { ProgressChart } from "@/components/ProgressChart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,10 +42,9 @@ export default function TeamDashboard() {
         <p className="text-muted-foreground">Team: {team?.name || "Loading..."}</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2">
         <StatsWidget title="Current Level" value={completedLevels + 1} subtitle={currentLevel?.title} icon={Target} />
         <StatsWidget title="Completed" value={`${completedLevels}/${totalLevels}`} icon={Trophy} />
-        <StatsWidget title="Challenges Left" value={totalLevels - completedLevels} icon={Layers} />
       </div>
 
       {currentLevel && (

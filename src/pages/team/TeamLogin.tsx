@@ -45,9 +45,6 @@ export default function TeamLogin() {
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign In
           </Button>
-          <p className="text-center text-sm text-muted-foreground">
-            <Link to="/admin/login" className="text-primary hover:underline">Admin Login →</Link>
-          </p>
         </form>
       </CardContent>
     </Card>

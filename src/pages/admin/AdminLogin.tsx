@@ -37,7 +37,6 @@ export default function AdminLogin() {
           <div className="space-y-2"><Label htmlFor="username">Username</Label><Input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="admin_username" required /></div>
           <div className="space-y-2"><Label htmlFor="password">Password</Label><Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required /></div>
           <Button type="submit" className="w-full" disabled={isLoading}>{isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Sign In</Button>
-          <p className="text-center text-sm text-muted-foreground"><Link to="/team/login" className="text-primary hover:underline">← Team Login</Link></p>
         </form>
       </CardContent>
     </Card>
