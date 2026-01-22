@@ -44,7 +44,7 @@ export default function TeamDashboard() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <StatsWidget title="Current Level" value={completedLevels + 1} subtitle={currentLevel?.title} icon={Target} />
-        <StatsWidget title="Completed" value={`${completedLevels}/${totalLevels}`} icon={Trophy} />
+        <StatsWidget title="Completed" value={completedLevels} icon={Trophy} />
       </div>
 
       {currentLevel && (

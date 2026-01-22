@@ -69,7 +69,7 @@ export default function TeamChallenge() {
           <h1 className="text-2xl font-bold">{currentLevel.title}</h1>
           <p className="text-muted-foreground">Solve this challenge to advance</p>
         </div>
-        <Badge variant="secondary" className="text-lg px-4 py-1">Level {levelNum}/{totalLevels}</Badge>
+        <Badge variant="secondary" className="text-lg px-4 py-1">Level {levelNum}</Badge>
       </div>
 
       {currentLevel.description && (
