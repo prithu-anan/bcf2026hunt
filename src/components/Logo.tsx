@@ -1,6 +1,7 @@
 import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { ADMIN_BASE_PATH } from "@/config/routes";
 
 interface LogoProps {
   size?: "sm" | "md" | "lg";
@@ -24,7 +25,7 @@ export function Logo({ size = "md", showText = true }: LogoProps) {
 
   // Determine where logo should link based on auth state
   const logoHref = user 
-    ? (user.role === "admin" ? "/admin/dashboard" : "/team/dashboard")
+    ? (user.role === "admin" ? `${ADMIN_BASE_PATH}/dashboard` : "/team/dashboard")
     : "/team/login";
 
   return (

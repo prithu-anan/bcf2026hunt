@@ -2,9 +2,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { SmartRedirect } from "@/components/SmartRedirect";
+import { ADMIN_BASE_PATH } from "@/config/routes";
 
 // Layouts
 import { AuthLayout } from "@/layouts/AuthLayout";
@@ -29,6 +31,7 @@ import AdminLevels from "@/pages/admin/AdminLevels";
 import AdminLevelDetail from "@/pages/admin/AdminLevelDetail";
 import AdminLeaderboard from "@/pages/admin/AdminLeaderboard";
 import AdminSettings from "@/pages/admin/AdminSettings";
+import AdminDecoy from "@/pages/admin/AdminDecoy";
 
 import NotFound from "@/pages/NotFound";
 
@@ -43,13 +46,19 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              {/* Redirect root to team login */}
-              <Route path="/" element={<Navigate to="/team/login" replace />} />
+              {/* Smart redirects based on auth state */}
+              <Route path="/" element={<SmartRedirect loginPath="/team/login" dashboardPath="/team/dashboard" />} />
+              <Route path="/team" element={<SmartRedirect loginPath="/team/login" dashboardPath="/team/dashboard" />} />
+              <Route path={ADMIN_BASE_PATH} element={<SmartRedirect loginPath={`${ADMIN_BASE_PATH}/login`} dashboardPath={`${ADMIN_BASE_PATH}/dashboard`} />} />
+
+              {/* Decoy admin route */}
+              <Route path="/admin" element={<AdminDecoy />} />
+              <Route path="/admin/*" element={<AdminDecoy />} />
 
               {/* Auth routes */}
               <Route element={<AuthLayout />}>
                 <Route path="/team/login" element={<TeamLogin />} />
-                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path={`${ADMIN_BASE_PATH}/login`} element={<AdminLogin />} />
               </Route>
 
               {/* Team protected routes */}
@@ -62,8 +71,8 @@ const App = () => (
                 <Route path="leaderboard" element={<TeamLeaderboard />} />
               </Route>
 
-              {/* Admin protected routes */}
-              <Route path="/admin" element={<AdminLayout />}>
+              {/* Admin protected routes (obscured path) */}
+              <Route path={ADMIN_BASE_PATH} element={<AdminLayout />}>
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="teams" element={<AdminTeams />} />
                 <Route path="teams/:teamId" element={<AdminTeamDetail />} />
