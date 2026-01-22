@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -70,10 +69,6 @@ export default function TeamProfile() {
             <div>
               <p className="text-sm text-muted-foreground">Team Name</p>
               <p className="font-medium">{user?.name || "—"}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Role</p>
-              <Badge variant="secondary">{user?.role || "TEAM"}</Badge>
             </div>
           </div>
         </CardContent>
