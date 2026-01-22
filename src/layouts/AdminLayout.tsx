@@ -15,13 +15,14 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
+import { ADMIN_BASE_PATH } from "@/config/routes";
 
 const navItems = [
-  { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/teams", label: "Teams", icon: Users },
-  { href: "/admin/levels", label: "Challenges", icon: Layers },
-  { href: "/admin/leaderboard", label: "Leaderboard", icon: Trophy },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: `${ADMIN_BASE_PATH}/dashboard`, label: "Dashboard", icon: LayoutDashboard },
+  { href: `${ADMIN_BASE_PATH}/teams`, label: "Teams", icon: Users },
+  { href: `${ADMIN_BASE_PATH}/levels`, label: "Challenges", icon: Layers },
+  { href: `${ADMIN_BASE_PATH}/leaderboard`, label: "Leaderboard", icon: Trophy },
+  { href: `${ADMIN_BASE_PATH}/settings`, label: "Settings", icon: Settings },
 ];
 
 export function AdminLayout() {
@@ -32,7 +33,7 @@ export function AdminLayout() {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/admin/login");
+    navigate(`${ADMIN_BASE_PATH}/login`);
   };
 
   return (
