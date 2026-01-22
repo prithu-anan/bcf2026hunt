@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { SmartRedirect } from "@/components/SmartRedirect";
+import { TeamProtectedRoute, AdminProtectedRoute } from "@/components/ProtectedRoute";
 import { ADMIN_BASE_PATH } from "@/config/routes";
 
 // Layouts
@@ -29,6 +30,7 @@ import AdminTeams from "@/pages/admin/AdminTeams";
 import AdminTeamDetail from "@/pages/admin/AdminTeamDetail";
 import AdminLevels from "@/pages/admin/AdminLevels";
 import AdminLevelDetail from "@/pages/admin/AdminLevelDetail";
+import AdminSubmissions from "@/pages/admin/AdminSubmissions";
 import AdminLeaderboard from "@/pages/admin/AdminLeaderboard";
 import AdminSettings from "@/pages/admin/AdminSettings";
 import AdminDecoy from "@/pages/admin/AdminDecoy";
@@ -40,11 +42,11 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
-      <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
             <Routes>
               {/* Smart redirects based on auth state */}
               <Route path="/" element={<SmartRedirect loginPath="/team/login" dashboardPath="/team/dashboard" />} />
@@ -55,14 +57,21 @@ const App = () => (
               <Route path="/admin" element={<AdminDecoy />} />
               <Route path="/admin/*" element={<AdminDecoy />} />
 
-              {/* Auth routes */}
+              {/* Auth routes (public) */}
               <Route element={<AuthLayout />}>
                 <Route path="/team/login" element={<TeamLogin />} />
                 <Route path={`${ADMIN_BASE_PATH}/login`} element={<AdminLogin />} />
               </Route>
 
               {/* Team protected routes */}
-              <Route path="/team" element={<TeamLayout />}>
+              <Route
+                path="/team"
+                element={
+                  <TeamProtectedRoute>
+                    <TeamLayout />
+                  </TeamProtectedRoute>
+                }
+              >
                 <Route path="dashboard" element={<TeamDashboard />} />
                 <Route path="profile" element={<TeamProfile />} />
                 <Route path="teams" element={<TeamsList />} />
@@ -72,12 +81,20 @@ const App = () => (
               </Route>
 
               {/* Admin protected routes (obscured path) */}
-              <Route path={ADMIN_BASE_PATH} element={<AdminLayout />}>
+              <Route
+                path={ADMIN_BASE_PATH}
+                element={
+                  <AdminProtectedRoute>
+                    <AdminLayout />
+                  </AdminProtectedRoute>
+                }
+              >
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="teams" element={<AdminTeams />} />
                 <Route path="teams/:teamId" element={<AdminTeamDetail />} />
                 <Route path="levels" element={<AdminLevels />} />
                 <Route path="levels/:levelId" element={<AdminLevelDetail />} />
+                <Route path="submissions" element={<AdminSubmissions />} />
                 <Route path="leaderboard" element={<AdminLeaderboard />} />
                 <Route path="settings" element={<AdminSettings />} />
               </Route>
@@ -85,9 +102,9 @@ const App = () => (
               {/* Catch-all */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </AuthProvider>
+          </TooltipProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </ThemeProvider>
   </QueryClientProvider>
 );
