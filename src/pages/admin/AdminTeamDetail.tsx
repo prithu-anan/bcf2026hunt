@@ -28,6 +28,7 @@ import {
   getSubmissions,
   getPuzzles,
   updateTeamProgress,
+  updateTeamToken,
   type TeamRecord,
   type SubmissionRecord,
   type AdminPuzzle,
@@ -44,9 +45,10 @@ export default function AdminTeamDetail() {
   const [puzzles, setPuzzles] = useState<AdminPuzzle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Progress update
+  // Progress/Token update
   const [editOpen, setEditOpen] = useState(false);
   const [newLevel, setNewLevel] = useState<string>("");
+  const [newToken, setNewToken] = useState<string>("");
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Pagination
@@ -72,6 +74,7 @@ export default function AdminTeamDetail() {
           const teamSubs = allSubs.filter((s) => s.team === foundTeam.name);
           setSubmissions(teamSubs);
           setNewLevel(String(foundTeam.level_completed));
+          setNewToken(foundTeam.token);
         }
       } catch (error) {
         toast.error("Failed to load team data", {
@@ -112,26 +115,64 @@ export default function AdminTeamDetail() {
     return sortedSubmissions.slice(start, start + PAGE_SIZE);
   }, [sortedSubmissions, currentPage]);
 
-  const handleUpdateProgress = async () => {
+  const handleUpdateTeam = async () => {
     if (!teamId || !team) return;
+
     const levelNum = parseInt(newLevel, 10);
     if (isNaN(levelNum) || levelNum < 0) {
       toast.error("Invalid level", { description: "Please enter a valid number." });
       return;
     }
 
+    if (!newToken.trim()) {
+      toast.error("Invalid token", { description: "Token cannot be empty." });
+      return;
+    }
+
     setIsUpdating(true);
     try {
-      const result = await updateTeamProgress(teamId, levelNum);
-      setTeam((prev) =>
-        prev ? { ...prev, level_completed: result.team.level_completed } : prev
-      );
+      const levelChanged = levelNum !== team.level_completed;
+      const tokenChanged = newToken !== team.token;
+
+      // Run both API calls in parallel if both changed
+      const [progressResult, tokenResult] = await Promise.all([
+        levelChanged ? updateTeamProgress(teamId, levelNum) : null,
+        tokenChanged ? updateTeamToken(teamId, newToken) : null,
+      ]);
+
+      // Update state with results
+      if (progressResult) {
+        setTeam((prev) =>
+          prev ? { ...prev, level_completed: progressResult.team.level_completed } : prev
+        );
+      }
+      if (tokenResult) {
+        setTeam((prev) =>
+          prev ? { ...prev, token: tokenResult.team.token } : prev
+        );
+      }
+
       setEditOpen(false);
-      toast.success("Progress updated", {
-        description: `${team.name} is now at level ${result.team.level_completed}`,
-      });
+
+      if (levelChanged && tokenChanged) {
+        toast.success("Team updated", {
+          description: `Progress and token updated for ${team.name}`,
+        });
+      } else if (levelChanged) {
+        toast.success("Progress updated", {
+          description: `${team.name} is now at level ${levelNum}`,
+        });
+      } else if (tokenChanged) {
+        toast.success("Token updated", {
+          description: `Token updated for ${team.name}`,
+        });
+      } else {
+        toast.info("No changes", {
+          description: "No changes were made.",
+        });
+      }
     } catch (error) {
-      toast.error("Failed to update progress", {
+      toast.error("Failed to update team", {
         description: getApiErrorMessage(error),
       });
     } finally {
@@ -186,11 +227,11 @@ export default function AdminTeamDetail() {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Update Team Progress</DialogTitle>
+                    <DialogTitle>Update Team Settings</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4">
                     <p className="text-sm text-muted-foreground">
-                      Manually update the progress level for {team.name}.
+                      Manually update the progress and token for {team.name}.
                     </p>
                     <div className="space-y-2">
                       <Label>Level Completed</Label>
@@ -201,8 +242,20 @@ export default function AdminTeamDetail() {
                         onChange={(e) => setNewLevel(e.target.value)}
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label>Token (Puzzle Sequence)</Label>
+                      <Input
+                        type="text"
+                        value={newToken}
+                        onChange={(e) => setNewToken(e.target.value)}
+                        placeholder="e.g., abcdefgh"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        The token defines the order of puzzles for this team.
+                      </p>
+                    </div>
                     <Button
-                      onClick={handleUpdateProgress}
+                      onClick={handleUpdateTeam}
                       className="w-full"
                       disabled={isUpdating}
                     >

@@ -49,6 +49,15 @@ export interface UpdateTeamProgressResponse {
   };
 }
 
+export interface UpdateTeamTokenResponse {
+  message: string;
+  team: {
+    id: string;
+    name: string;
+    token: string;
+  };
+}
+
 export interface AdminPuzzle {
   _id: string;
   id: string;
@@ -98,6 +107,19 @@ export const updateTeamProgress = async (
     `/admin/teams/${teamId}/progress`,
     { level_completed },
     withAuth({}, token)
+  );
+  return data;
+};
+
+export const updateTeamToken = async (
+  teamId: string,
+  newToken: string,
+  authToken?: string
+) => {
+  const { data } = await apiClient.patch<UpdateTeamTokenResponse>(
+    `/admin/teams/${teamId}/token`,
+    { token: newToken },
+    withAuth({}, authToken)
   );
   return data;
 };
