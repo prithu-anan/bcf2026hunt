@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader2, Shield } from "lucide-react";
+import { ADMIN_BASE_PATH } from "@/config/routes";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
@@ -19,7 +20,7 @@ export default function AdminLogin() {
     setIsLoading(true);
     try {
       await login(username, password, "admin");
-      navigate("/admin/dashboard");
+      navigate(`${ADMIN_BASE_PATH}/dashboard`);
     } finally {
       setIsLoading(false);
     }
